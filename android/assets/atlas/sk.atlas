@@ -1,0 +1,138 @@
+
+sk.png
+format: RGBA4444
+filter: MipMapLinearLinear,MipMapLinearLinear
+repeat: none
+Unit1
+  rotate: false
+  xy: 1, 1
+  size: 170, 160
+  orig: 170, 160
+  offset: 0, 0
+  index: 19
+Unit1
+  rotate: false
+  xy: 1893, 1
+  size: 170, 160
+  orig: 170, 160
+  offset: 0, 0
+  index: 18
+Unit1
+  rotate: false
+  xy: 2065, 1
+  size: 170, 160
+  orig: 170, 160
+  offset: 0, 0
+  index: 17
+Unit1
+    rotate: false
+    xy: 2237, 1
+    size: 170, 160
+    orig: 170, 160
+    offset: 0, 0
+    index: 16
+Unit1
+    rotate: false
+    xy: 2409, 1
+    size: 170, 160
+    orig: 170, 160
+    offset: 0, 0
+    index: 15
+Unit1
+    rotate: false
+    xy: 2581, 1
+    size: 170, 160
+    orig: 170, 160
+    offset: 0, 0
+    index: 14
+Unit1
+    rotate: false
+    xy: 2753, 1
+    size: 170, 160
+    orig: 170, 160
+    offset: 0, 0
+    index: 13
+Unit1
+    rotate: false
+    xy: 2925, 1
+    size: 170, 160
+    orig: 170, 160
+    offset: 0, 0
+    index: 12
+Unit1
+    rotate: false
+    xy: 3097, 1
+    size: 170, 160
+    orig: 170, 160
+    offset: 0, 0
+    index: 11
+Unit1
+  rotate: false
+  xy: 173, 1
+  size: 170, 160
+  orig: 170, 160
+  offset: 0, 0
+  index: 10
+Unit1
+  rotate: false
+  xy: 345, 1
+  size: 170, 160
+  orig: 170, 160
+  offset: 0, 0
+  index: 9
+Unit1
+  rotate: false
+  xy: 517, 1
+  size: 170, 160
+  orig: 170, 160
+  offset: 0, 0
+  index: 8
+Unit1
+  rotate: false
+  xy: 689, 1
+  size: 170, 160
+  orig: 170, 160
+  offset: 0, 0
+  index: 7
+Unit1
+  rotate: false
+  xy: 861, 1
+  size: 170, 160
+  orig: 170, 160
+  offset: 0, 0
+  index: 6
+Unit1
+  rotate: false
+  xy: 1033, 1
+  size: 170, 160
+  orig: 170, 160
+  offset: 0, 0
+  index: 5
+Unit1
+  rotate: false
+  xy: 1205, 1
+  size: 170, 160
+  orig: 170, 160
+  offset: 0, 0
+  index: 4
+Unit1
+  rotate: false
+  xy: 1377, 1
+  size: 170, 160
+  orig: 170, 160
+  offset: 0, 0
+  index: 3
+Unit1
+  rotate: false
+  xy: 1549, 1
+  size: 170, 160
+  orig: 170, 160
+  offset: 0, 0
+  index: 2
+Unit1
+  rotate: false
+  xy: 1721, 1
+  size: 170, 160
+  orig: 170, 160
+  offset: 0, 0
+  index: 1

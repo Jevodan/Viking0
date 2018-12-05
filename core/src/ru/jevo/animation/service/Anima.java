@@ -43,6 +43,8 @@ public class Anima {
                 currentFrame = walkFrames[i];
             minAngle = grades[i];
         }
+        if (angle > (357.076f - 360f) && angle < 8.688f)
+        currentFrame = walkFrames[23];
         return currentFrame;
     }
 

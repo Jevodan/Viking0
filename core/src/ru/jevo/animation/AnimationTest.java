@@ -7,7 +7,9 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.utils.Array;
 
 public class AnimationTest implements ApplicationListener {
 
@@ -20,24 +22,18 @@ public class AnimationTest implements ApplicationListener {
     TextureRegion[] walkFrames; //Объявление walkFrames как массива объектов TextureRegion. Массив будет содержать каждый кадр (спрайт) анимации. Первый элемент содержит верхний левый кадр, второй элемент содержит следующий справа кард и так далее. При достижении последнего элемента ряда, следующий ряд начинается с самого левого элемента.
     SpriteBatch mSpriteBatch;
     TextureRegion currentFrame;
-    float stateTime;
+    float stateTime = 1;
+
+    TextureAtlas atlas;
+    public Animation<TextureRegion> runningAnimation;
+//    TextureAtlas spritesheet = new TextureAtlas(Gdx.files.internal("atlas/sk.atlas"));
 
 
     @Override
     public void create() {
-        walkSheet = new Texture(Gdx.files.internal(ATLAS)); //Создает текстуру из animation_sheet.png файла, находящегося в assets директории проекта (смотрите настройку проекта).
-
-        TextureRegion[][] tmp = TextureRegion.split(walkSheet, walkSheet.getWidth() / FRAME_COLS, walkSheet.getHeight() / FRAME_ROWS);
-        walkFrames = new TextureRegion[FRAME_COLS * FRAME_ROWS];
-        int index = 0;
-        for (int i = 0; i < FRAME_ROWS; i++) {
-            for (int j = FRAME_COLS  - 1; j >= 0; j--) {
-                walkFrames[index++] = tmp[i][j];
-            }
-        }
-        walkAnimation = new Animation(0.035f, walkFrames);
+        atlas = new TextureAtlas(Gdx.files.internal("atlas/sk.atlas"));
         mSpriteBatch = new SpriteBatch();
-        stateTime = 0f;
+        runningAnimation = new Animation<TextureRegion>(0.103f, atlas.findRegions("Unit1"), Animation.PlayMode.LOOP);
 
     }
 
@@ -51,9 +47,10 @@ public class AnimationTest implements ApplicationListener {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
         stateTime += Gdx.graphics.getDeltaTime();
-        currentFrame = (TextureRegion) walkAnimation.getKeyFrame(stateTime, true);
+//        currentFrame = (TextureRegion) runningAnimation.getKeyFrame(stateTime, true);
         mSpriteBatch.begin();
-        mSpriteBatch.draw(currentFrame, 100, 100);
+        mSpriteBatch.draw(runningAnimation.getKeyFrame(stateTime, true), 100, 100);
+        //    mSpriteBatch.draw(currentFrame, 100, 100);
         mSpriteBatch.end();
     }
 

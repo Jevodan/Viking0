@@ -2,125 +2,165 @@ package ru.jevo.animation.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.TimeUtils;
-
-import java.util.Iterator;
-
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import ru.jevo.animation.GameViking;
 import ru.jevo.animation.basic.BasicScreen;
+import ru.jevo.animation.ships.MilitarySmall;
+import ru.jevo.animation.ships.Viking;
+import ru.jevo.animation.sprites.Background;
+import ru.jevo.animation.sprites.Star;
+import ru.jevo.animation.weapon.SimpleBlaster;
+
+import static com.badlogic.gdx.Input.Keys.LEFT;
+
 
 
 public class GameScreen extends BasicScreen {
 
-    private static final int BUCKET_SIZE = 64;
+    public static final int ENEMY_COUNT = 5;
 
-    final private Texture dropImage = new Texture("images/droplet.png");
-    final private Texture bucketImage = new Texture("images/bucket.png");
-    final private Sound dropSound = Gdx.audio.newSound(Gdx.files.internal("sounds/kup.wav"));
-    final private Music rainMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/rain.mp3"));
-    final private Rectangle bucket = new Rectangle();
-    final private Vector3 touchPos = new Vector3();
-    final private Array<Rectangle> rainDrops = new Array<Rectangle>();
-    private long lastDropTime;
-    private int dropsGathered;
-    final private BitmapFont font = new BitmapFont();
+    Viking mViking;
+    MilitarySmall[] mMilitarySmalls;
+    TextureAtlas mainTextureAtlas;
+    TextureAtlas enemyTextureAtlas;
 
+    public GameScreen(GameViking game) {
+        super(game);
+    }
 
     @Override
     public void show() {
         super.show();
-        mCamera.setToOrtho(false, 800, 480);
+        bgTexture = new Texture("images/bg.png");
+        enemyTextureAtlas = new TextureAtlas("atlas/enemy1/enemy_pack1.atlas");
+        menuTextureAtlas = new TextureAtlas("atlas/menuAtlas.tpack");
+        mainTextureAtlas = new TextureAtlas("atlas/mainAtlas.tpack");
+        mBackground = new Background(new TextureRegion(bgTexture));
         rainMusic.setLooping(true); // повторение музыки
         rainMusic.play();
-        bucket.x = 800 / 2 - BUCKET_SIZE / 2; // по центру,учитывая размер ведра
-        bucket.y = 20;
-        bucket.width = BUCKET_SIZE;
-        bucket.height = BUCKET_SIZE;
-        spawnRainDrop();
+        mStar = new Star[STAR_COUNT];
+        mMilitarySmalls = new MilitarySmall[5];
+        for (int i = 0; i < STAR_COUNT; i++)
+            mStar[i] = new Star(menuTextureAtlas);
+        mViking = new Viking(mainTextureAtlas);
+        for (int i = 0; i < ENEMY_COUNT; i++) {
+            mMilitarySmalls[i] = new MilitarySmall(enemyTextureAtlas);
+        }
+        for (int i = 0; i < ENEMY_COUNT; i++) {
+            mMilitarySmalls[i].setFireBehavior(new SimpleBlaster());
+        }
     }
 
     @Override
     public void render(float delta) {
         super.render(delta);
-        Gdx.gl.glClearColor(0, 0, 0.2f, 0.9f);
+        update(delta);
+        draw(delta);
+    }
+
+    public void update(float delta) {
+        for (int i = 0; i < STAR_COUNT; i++)
+            mStar[i].update(delta);
+        for (int i = 0; i < ENEMY_COUNT; i++){
+            mMilitarySmalls[i].update(delta);
+            mMilitarySmalls[i].getFireBehavior().update(delta);
+        }
+
+    }
+
+    public void draw(float delta) {
+        Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        mCamera.update();
-        batch.setProjectionMatrix(mCamera.combined); //спрайтбатч нарисует все,что будет находиться в заданных координатах.
         batch.begin();
-        font.draw(batch, "Drops Collected: " + dropsGathered, 0, 480);
-        batch.draw(bucketImage, bucket.x, bucket.y);
-        for (Rectangle raindrop : rainDrops) {
-            batch.draw(dropImage, raindrop.x, raindrop.y);
+        mBackground.draw(batch);
+        for (int i = 0; i < STAR_COUNT; i++)
+            mStar[i].draw(batch);
+        mViking.draw(batch);
+        for (int i = 0; i < ENEMY_COUNT; i++) {
+            mMilitarySmalls[i].draw(batch);
+            mMilitarySmalls[i].getFireBehavior().fire(batch);
         }
-        if (dropsGathered > 5){
-            font.draw(batch, "YOUUUUUU WIIINNN!!!!: " + dropsGathered, 350, 240);
-            // STOPSHIP: 25.11.2018
-            pause();
-            Gdx.app.exit();
-        }
+
         batch.end();
+        drive(delta);
+    }
 
-        if (Gdx.input.isTouched()) {
-            touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-            mCamera.unproject(touchPos); //пробразование координат в систему координат камеры
-            bucket.x = (int) (touchPos.x - 64 / 2);
-        }
-
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) bucket.x -= 200 * Gdx.graphics.getDeltaTime();
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) bucket.x += 200 * Gdx.graphics.getDeltaTime();
-
-        if (bucket.x < 0) bucket.x = 0;
-        if (bucket.x > 800 - BUCKET_SIZE) bucket.x = 800 - BUCKET_SIZE;
-
-        if (TimeUtils.nanoTime() - lastDropTime > 1000000000) spawnRainDrop();
-
-        Iterator<Rectangle> iter = rainDrops.iterator();
-        while (iter.hasNext()) {
-            Rectangle rainDrop = iter.next();
-            rainDrop.y -= 200 * Gdx.graphics.getDeltaTime();
-            if (rainDrop.y + 64 < 0) iter.remove();
-            if (rainDrop.overlaps(bucket)) {
-                dropsGathered++;
-                dropSound.play();
-                iter.remove();
-            }
+    @Override
+    public void resize(int width, int height) {
+        super.resize(width, height);
+        mBackground.resize(serviceRect);
+        for (int i = 0; i < STAR_COUNT; i++)
+            mStar[i].resize(serviceRect);
+        mViking.resize(serviceRect);
+        for (int i = 0; i < ENEMY_COUNT; i++) {
+            mMilitarySmalls[i].resize(serviceRect);
+            mMilitarySmalls[i].getFireBehavior().resize(mMilitarySmalls[i]);
         }
     }
 
     @Override
-    public void pause() {
-        super.pause();
+    public boolean keyDown(int keycode) {
+        if (keycode == LEFT)
+            System.out.println("ВЛЕВО");
+        return super.keyDown(keycode);
     }
 
     @Override
-    public void hide() {
-        super.hide();
+    public boolean keyUp(int keycode) {
+        return super.keyUp(keycode);
     }
 
     @Override
-    public void dispose() {
-        super.dispose();
-        dropImage.dispose();
-        dropSound.dispose();
-        bucketImage.dispose();
-        rainMusic.dispose();
+    public boolean keyTyped(char character) {
+        return super.keyTyped(character);
     }
 
-    private void spawnRainDrop() {
-        Rectangle rainDrop = new Rectangle();
-        rainDrop.x = MathUtils.random(0, 800 - BUCKET_SIZE);
-        rainDrop.y = 480;
-        rainDrop.width = BUCKET_SIZE;
-        rainDrop.height = BUCKET_SIZE;
-        rainDrops.add(rainDrop);
-        lastDropTime = TimeUtils.nanoTime();
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        return super.touchDown(screenX, screenY, pointer, button);
+    }
+
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        return super.touchUp(screenX, screenY, pointer, button);
+    }
+
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        return super.touchDragged(screenX, screenY, pointer);
+    }
+
+    @Override
+    public boolean mouseMoved(int screenX, int screenY) {
+        return super.mouseMoved(screenX, screenY);
+    }
+
+    @Override
+    public boolean scrolled(int amount) {
+        return super.scrolled(amount);
+    }
+
+    private void drive(float delta) {
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+            mViking.speed.set(-1, 0);
+            mViking.update(delta);
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+            mViking.speed.set(1, 0);
+            mViking.update(delta);
+        }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+            mViking.speed.set(0, 1);
+            mViking.update(delta);
+        }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+            mViking.speed.set(0, -1);
+            mViking.update(delta);
+        }
     }
 }

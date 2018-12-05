@@ -8,11 +8,16 @@ import ru.jevo.animation.GameViking;
 
 public class DesktopLauncher {
 
-	public static void main (String[] arg) {
-		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		config.title = "Drop";
-		config.width = 800;
-		config.height = 480;
-		new LwjglApplication(new GameViking(), config);
-	}
+    public static void main(String[] arg) {
+        LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+        config.title = "Drop";
+        final float aspect = 3f / 4f;
+        config.width = 350;
+        config.height = (int) (config.width / aspect);
+        config.resizable = false;
+        config.y = 300;
+        config.x = 700;
+
+        new LwjglApplication(new GameViking(), config);
+    }
 }

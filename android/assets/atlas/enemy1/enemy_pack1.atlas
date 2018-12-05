@@ -1,0 +1,238 @@
+
+enemy_pack1.png
+format: RGBA8888
+filter: MipMapNearestNearest,MipMap
+repeat: xy
+family0/military_large
+  rotate: false
+  xy: 0, 0
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+family0/military_medium
+  rotate: false
+  xy: 242, 0
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+family0/colonyship
+  rotate: false
+  xy: 484, 80
+  size: 160, 160
+  orig: 160, 160
+  offset: 0, 0
+  index: -1
+family0/military_small
+  rotate: false
+  xy: 646, 120
+  size: 120, 120
+  orig: 120, 120
+  offset: 0, 0
+  index: -1
+
+enemy_pack16.png
+format: RGBA8888
+filter: MipMapNearestNearest,MipMap
+repeat: xy
+family1/military_large
+  rotate: false
+  xy: 0, 0
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+family1/military_medium
+  rotate: false
+  xy: 242, 40
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: -1
+family1/colonyship
+  rotate: false
+  xy: 444, 80
+  size: 160, 160
+  orig: 160, 160
+  offset: 0, 0
+  index: -1
+family1/military_small
+  rotate: false
+  xy: 606, 120
+  size: 120, 120
+  orig: 120, 120
+  offset: 0, 0
+  index: -1
+
+enemy_pack13.png
+format: RGBA8888
+filter: MipMapNearestNearest,MipMap
+repeat: xy
+family2/genericbase
+  rotate: false
+  xy: 0, 202
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
+family2/military_large
+  rotate: false
+  xy: 302, 262
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+family2/military_medium
+  rotate: false
+  xy: 0, 0
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: -1
+family2/colonyship
+  rotate: false
+  xy: 544, 342
+  size: 160, 160
+  orig: 160, 160
+  offset: 0, 0
+  index: -1
+family2/military_small
+  rotate: false
+  xy: 706, 382
+  size: 120, 120
+  orig: 120, 120
+  offset: 0, 0
+  index: -1
+
+enemy_pack14.png
+format: RGBA8888
+filter: MipMapNearestNearest,MipMap
+repeat: xy
+family3/military_large
+  rotate: false
+  xy: 0, 0
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+family3/military_medium
+  rotate: false
+  xy: 242, 40
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: -1
+family3/colonyship
+  rotate: false
+  xy: 444, 80
+  size: 160, 160
+  orig: 160, 160
+  offset: 0, 0
+  index: -1
+family3/military_small
+  rotate: false
+  xy: 606, 120
+  size: 120, 120
+  orig: 120, 120
+  offset: 0, 0
+  index: -1
+
+enemy_pack15.png
+format: RGBA8888
+filter: MipMapNearestNearest,MipMap
+repeat: xy
+family4/military_large
+  rotate: false
+  xy: 0, 0
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+family4/military_medium
+  rotate: false
+  xy: 242, 40
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: -1
+family4/colonyship
+  rotate: false
+  xy: 444, 80
+  size: 160, 160
+  orig: 160, 160
+  offset: 0, 0
+  index: -1
+family4/military_small
+  rotate: false
+  xy: 606, 120
+  size: 120, 120
+  orig: 120, 120
+  offset: 0, 0
+  index: -1
+
+enemy_pack12.png
+format: RGBA8888
+filter: MipMapNearestNearest,MipMap
+repeat: xy
+family5/military_large
+  rotate: false
+  xy: 0, 0
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+family5/military_medium
+  rotate: false
+  xy: 242, 40
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: -1
+family5/colonyship
+  rotate: false
+  xy: 444, 80
+  size: 160, 160
+  orig: 160, 160
+  offset: 0, 0
+  index: -1
+family5/military_small
+  rotate: false
+  xy: 606, 120
+  size: 120, 120
+  orig: 120, 120
+  offset: 0, 0
+  index: -1
+
+enemy_pack17.png
+format: RGBA8888
+filter: MipMapNearestNearest,MipMap
+repeat: xy
+family6/military_large
+  rotate: false
+  xy: 0, 0
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+family6/colonyship
+  rotate: false
+  xy: 242, 40
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: -1
+family6/military_medium
+  rotate: false
+  xy: 444, 40
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: -1
+family6/military_small
+  rotate: false
+  xy: 646, 120
+  size: 120, 120
+  orig: 120, 120
+  offset: 0, 0
+  index: -1
