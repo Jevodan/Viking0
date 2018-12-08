@@ -1,11 +1,9 @@
-package ru.jevo.animation.weapon;
+package ru.jevo.animation.sprites.weapon;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.MathUtils;
 
 import ru.jevo.animation.basic.Fire;
 import ru.jevo.animation.basic.Fireable;
-import ru.jevo.animation.basic.Ship;
 import ru.jevo.animation.service.Rect;
 
 /**

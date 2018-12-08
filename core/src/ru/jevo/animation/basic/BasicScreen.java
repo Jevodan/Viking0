@@ -1,5 +1,6 @@
 package ru.jevo.animation.basic;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
@@ -27,7 +28,7 @@ import static com.badlogic.gdx.Input.Keys.LEFT;
  */
 public class BasicScreen implements Screen, InputProcessor {
 
-    final protected GameViking game;
+    final protected Game game;
 
     public static final float MY_SCREEN_SIZE = 10f;
     public static final int STAR_COUNT = 150;
@@ -50,7 +51,7 @@ public class BasicScreen implements Screen, InputProcessor {
 
     final public static Vector2 touch = new Vector2();
 
-    public BasicScreen(final GameViking game) {
+    public BasicScreen(final Game game) {
         this.game = game;
         this.screenRect = new Rect();
         this.serviceRect = new Rect();
@@ -125,12 +126,25 @@ public class BasicScreen implements Screen, InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        touch.set(screenX, screenRect.getHeight() - screenY).mul(screenToService);
+        touchDown(touch, pointer);
+        return false;
+    }
+
+    public boolean touchDown(Vector2 touch, int pointer)
+    {
+        System.out.println(touch);
         return false;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        System.out.println("Не двигай мыху");
+        touch.set(screenX, screenRect.getHeight() - screenY).mul(screenToService);
+        touchUp(touch, pointer);
+        return false;
+    }
+
+    public boolean touchUp(Vector2 touch, int pointer) {
         return false;
     }
 

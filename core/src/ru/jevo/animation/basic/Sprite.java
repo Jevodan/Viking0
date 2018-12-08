@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.jevo.animation.service.Rect;
+import ru.jevo.animation.service.Regions;
 
 
 /**
@@ -18,10 +19,18 @@ public abstract class Sprite extends Rect {
     protected TextureRegion[] regions;
     protected int currentFrame;
     protected Rect mServiceRect;
+    private boolean isDestroyed;
+
+    public Sprite() {
+    }
 
     public Sprite(TextureRegion region) {
         regions = new TextureRegion[1];
         regions[0] = region;
+    }
+
+    public Sprite(TextureRegion region, int cols, int rows, int frames) {
+        regions = Regions.split(region, cols, rows, frames);
     }
 
     public void draw(SpriteBatch batch) {
@@ -75,6 +84,16 @@ public abstract class Sprite extends Rect {
 
     public void setScale(float scale) {
         this.scale = scale;
+    }
+
+
+    public boolean isDestroyed() {
+        return isDestroyed;
+    }
+
+    public void setDestroyed(boolean destroyed) {
+
+        isDestroyed = destroyed;
     }
 
 }

@@ -1,33 +1,34 @@
 package ru.jevo.animation.screens;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import ru.jevo.animation.GameViking;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
+
 import ru.jevo.animation.basic.BasicScreen;
-import ru.jevo.animation.ships.MilitarySmall;
-import ru.jevo.animation.ships.Viking;
+import ru.jevo.animation.pools.weapons.BulletPool;
+import ru.jevo.animation.pools.ships.MilitarySmallPool;
+import ru.jevo.animation.sprites.ships.MilitarySmall;
+import ru.jevo.animation.sprites.ships.Viking;
 import ru.jevo.animation.sprites.Background;
 import ru.jevo.animation.sprites.Star;
-import ru.jevo.animation.weapon.SimpleBlaster;
-
-import static com.badlogic.gdx.Input.Keys.LEFT;
-
 
 
 public class GameScreen extends BasicScreen {
 
-    public static final int ENEMY_COUNT = 5;
+    protected float animateTimer = 0;
 
     Viking mViking;
     MilitarySmall[] mMilitarySmalls;
     TextureAtlas mainTextureAtlas;
-    TextureAtlas enemyTextureAtlas;
+    private BulletPool bulletPool;
+    private MilitarySmallPool mMilitarySmallPool;
 
-    public GameScreen(GameViking game) {
+    public GameScreen(Game game) {
         super(game);
     }
 
@@ -35,7 +36,6 @@ public class GameScreen extends BasicScreen {
     public void show() {
         super.show();
         bgTexture = new Texture("images/bg.png");
-        enemyTextureAtlas = new TextureAtlas("atlas/enemy1/enemy_pack1.atlas");
         menuTextureAtlas = new TextureAtlas("atlas/menuAtlas.tpack");
         mainTextureAtlas = new TextureAtlas("atlas/mainAtlas.tpack");
         mBackground = new Background(new TextureRegion(bgTexture));
@@ -45,30 +45,54 @@ public class GameScreen extends BasicScreen {
         mMilitarySmalls = new MilitarySmall[5];
         for (int i = 0; i < STAR_COUNT; i++)
             mStar[i] = new Star(menuTextureAtlas);
-        mViking = new Viking(mainTextureAtlas);
+        bulletPool = new BulletPool();
+        mMilitarySmallPool = new MilitarySmallPool();
+        mViking = new Viking(mainTextureAtlas, bulletPool);
+        /*
         for (int i = 0; i < ENEMY_COUNT; i++) {
             mMilitarySmalls[i] = new MilitarySmall(enemyTextureAtlas);
         }
+
+
         for (int i = 0; i < ENEMY_COUNT; i++) {
             mMilitarySmalls[i].setFireBehavior(new SimpleBlaster());
         }
+        */
     }
 
     @Override
     public void render(float delta) {
         super.render(delta);
         update(delta);
+        checkCollisions();
+        deleteAllDestroyed();
         draw(delta);
     }
 
+    private void checkCollisions() {
+    }
+
     public void update(float delta) {
+        mViking.update(delta);
+        bulletPool.updateActiveSprites(delta);
+        mMilitarySmallPool.updateActiveSprites(delta);
         for (int i = 0; i < STAR_COUNT; i++)
             mStar[i].update(delta);
-        for (int i = 0; i < ENEMY_COUNT; i++){
-            mMilitarySmalls[i].update(delta);
-            mMilitarySmalls[i].getFireBehavior().update(delta);
-        }
 
+        animateTimer += delta;
+        if (animateTimer > 8) {
+            animateTimer = 0f;
+            System.out.println("МИЛИТАРИСМОЛЛ ПОШЕЛ");
+            MilitarySmall mMilitarySmallShip = mMilitarySmallPool.obtain();
+            mMilitarySmallShip.speed.set(0, -0.8f);
+            mMilitarySmallShip.pos.set(MathUtils.random(serviceRect.getLeft(), serviceRect.getRight()), serviceRect.getTop());
+            mMilitarySmallShip.set(new Vector2(0, -1.5f), 1f, serviceRect);
+        }
+    }
+
+    public void deleteAllDestroyed() {
+        bulletPool.freeAllDestroyedActiveSprites();
+        mMilitarySmallPool.freeAllDestroyedActiveSprites();
     }
 
     public void draw(float delta) {
@@ -79,13 +103,9 @@ public class GameScreen extends BasicScreen {
         for (int i = 0; i < STAR_COUNT; i++)
             mStar[i].draw(batch);
         mViking.draw(batch);
-        for (int i = 0; i < ENEMY_COUNT; i++) {
-            mMilitarySmalls[i].draw(batch);
-            mMilitarySmalls[i].getFireBehavior().fire(batch);
-        }
-
+        bulletPool.drawActiveSprites(batch);
+        mMilitarySmallPool.drawActiveSprites(batch);
         batch.end();
-        drive(delta);
     }
 
     @Override
@@ -95,21 +115,17 @@ public class GameScreen extends BasicScreen {
         for (int i = 0; i < STAR_COUNT; i++)
             mStar[i].resize(serviceRect);
         mViking.resize(serviceRect);
-        for (int i = 0; i < ENEMY_COUNT; i++) {
-            mMilitarySmalls[i].resize(serviceRect);
-            mMilitarySmalls[i].getFireBehavior().resize(mMilitarySmalls[i]);
-        }
     }
 
     @Override
     public boolean keyDown(int keycode) {
-        if (keycode == LEFT)
-            System.out.println("ВЛЕВО");
+        mViking.keyDown(keycode);
         return super.keyDown(keycode);
     }
 
     @Override
     public boolean keyUp(int keycode) {
+        mViking.keyUp(keycode);
         return super.keyUp(keycode);
     }
 
@@ -120,7 +136,9 @@ public class GameScreen extends BasicScreen {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        return super.touchDown(screenX, screenY, pointer, button);
+        super.touchDown(screenX, screenY, pointer, button);
+        mViking.touchDown(touch, pointer);
+        return false;
     }
 
     @Override
@@ -143,24 +161,16 @@ public class GameScreen extends BasicScreen {
         return super.scrolled(amount);
     }
 
-    private void drive(float delta) {
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            mViking.speed.set(-1, 0);
-            mViking.update(delta);
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            mViking.speed.set(1, 0);
-            mViking.update(delta);
-        }
-
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            mViking.speed.set(0, 1);
-            mViking.update(delta);
-        }
-
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            mViking.speed.set(0, -1);
-            mViking.update(delta);
-        }
+    @Override
+    public void dispose() {
+        bgTexture.dispose();
+        menuTextureAtlas.dispose();
+        mainTextureAtlas.dispose();
+        rainMusic.dispose();
+        rainMusic.dispose();
+        bulletPool.dispose();
+        mMilitarySmallPool.dispose();
+        super.dispose();
     }
+
 }

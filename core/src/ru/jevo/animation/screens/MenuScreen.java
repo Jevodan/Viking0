@@ -46,7 +46,7 @@ public class MenuScreen extends BasicScreen {
         mStar = new Star[STAR_COUNT];
         for (int i = 0; i < STAR_COUNT; i++)
             mStar[i] = new Star(menuTextureAtlas);
-        mStartButton = new StartButton(menuTextureAtlas);
+        mStartButton = new StartButton(menuTextureAtlas, game);
         mExitButton = new ExitButton(menuTextureAtlas);
 
         //  Anima.setTexture(); заполняем массив текстурами спрайта моего крейсера
@@ -107,27 +107,17 @@ public class MenuScreen extends BasicScreen {
     }
 
     @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        super.touchDown(screenX, screenY, pointer, button);
-        touch.set(screenX, screenRect.getHeight() - screenY).mul(screenToService);
-        if (mExitButton.isMe(touch)) {
-            mExitButton.setScale(mExitButton.getScale() * 0.9f);
-            Gdx.app.exit();
-        }
-        if (mStartButton.isMe(touch))
-            mStartButton.setScale(mStartButton.getScale() * 0.9f);
-        return true;
+    public boolean touchDown(Vector2 touch, int pointer) {
+        mStartButton.touchDown(touch, pointer);
+        mExitButton.touchDown(touch, pointer);
+        return super.touchDown(touch, pointer);
     }
 
     @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        touch.set(screenX, screenRect.getHeight() - screenY).mul(screenToService);
-        if (mStartButton.isMe(touch)) {
-            game.setScreen(new GameScreen(game));
-        }
-        mStartButton.setScale(Sprite.SCALE_DEFAULT);
-        mExitButton.setScale(Sprite.SCALE_DEFAULT);
-        return super.touchUp(screenX, screenY, pointer, button);
+    public boolean touchUp(Vector2 touch, int pointer) {
+        mStartButton.touchUp(touch, pointer);
+        mExitButton.touchUp(touch, pointer);
+        return super.touchUp(touch, pointer);
     }
 
     @Override
