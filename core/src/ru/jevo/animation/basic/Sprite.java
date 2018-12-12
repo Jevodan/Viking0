@@ -95,5 +95,4 @@ public abstract class Sprite extends Rect {
 
         isDestroyed = destroyed;
     }
-
 }

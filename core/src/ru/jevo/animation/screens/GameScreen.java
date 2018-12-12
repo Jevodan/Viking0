@@ -7,11 +7,17 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
-
 import ru.jevo.animation.basic.BasicScreen;
+import ru.jevo.animation.basic.Ship;
+import ru.jevo.animation.pools.ships.ColonyShipPool;
+import ru.jevo.animation.pools.ships.MilitaryLargePool;
+import ru.jevo.animation.pools.ships.MilitaryMediumPool;
 import ru.jevo.animation.pools.weapons.BulletPool;
 import ru.jevo.animation.pools.ships.MilitarySmallPool;
+import ru.jevo.animation.pools.weapons.SimpleBlasterPool;
+import ru.jevo.animation.sprites.ships.ColonyShip;
+import ru.jevo.animation.sprites.ships.MilitaryLarge;
+import ru.jevo.animation.sprites.ships.MilitaryMedium;
 import ru.jevo.animation.sprites.ships.MilitarySmall;
 import ru.jevo.animation.sprites.ships.Viking;
 import ru.jevo.animation.sprites.Background;
@@ -20,13 +26,17 @@ import ru.jevo.animation.sprites.Star;
 
 public class GameScreen extends BasicScreen {
 
-    protected float animateTimer = 0;
+    private float[] animateTimer = {1f, 6f, 8f, 10f};
+    private float animateTime = 0;
 
     Viking mViking;
-    MilitarySmall[] mMilitarySmalls;
     TextureAtlas mainTextureAtlas;
     private BulletPool bulletPool;
+    private SimpleBlasterPool blasterPool;
     private MilitarySmallPool mMilitarySmallPool;
+    private MilitaryMediumPool mMilitaryMediumPool;
+    private MilitaryLargePool mMilitaryLargePool;
+    private ColonyShipPool mColonyShipPool;
 
     public GameScreen(Game game) {
         super(game);
@@ -42,22 +52,15 @@ public class GameScreen extends BasicScreen {
         rainMusic.setLooping(true); // повторение музыки
         rainMusic.play();
         mStar = new Star[STAR_COUNT];
-        mMilitarySmalls = new MilitarySmall[5];
         for (int i = 0; i < STAR_COUNT; i++)
             mStar[i] = new Star(menuTextureAtlas);
         bulletPool = new BulletPool();
-        mMilitarySmallPool = new MilitarySmallPool();
+        blasterPool = new SimpleBlasterPool();
+        mMilitarySmallPool = new MilitarySmallPool(bulletPool);
+        mMilitaryMediumPool = new MilitaryMediumPool(bulletPool);
+        mMilitaryLargePool = new MilitaryLargePool(bulletPool);
+        mColonyShipPool = new ColonyShipPool(blasterPool);
         mViking = new Viking(mainTextureAtlas, bulletPool);
-        /*
-        for (int i = 0; i < ENEMY_COUNT; i++) {
-            mMilitarySmalls[i] = new MilitarySmall(enemyTextureAtlas);
-        }
-
-
-        for (int i = 0; i < ENEMY_COUNT; i++) {
-            mMilitarySmalls[i].setFireBehavior(new SimpleBlaster());
-        }
-        */
     }
 
     @Override
@@ -76,23 +79,52 @@ public class GameScreen extends BasicScreen {
         mViking.update(delta);
         bulletPool.updateActiveSprites(delta);
         mMilitarySmallPool.updateActiveSprites(delta);
+        mMilitaryMediumPool.updateActiveSprites(delta);
+        mMilitaryLargePool.updateActiveSprites(delta);
+        mColonyShipPool.updateActiveSprites(delta);
         for (int i = 0; i < STAR_COUNT; i++)
             mStar[i].update(delta);
+        System.out.println(animateTime + " " + animateTimer[0]);
 
-        animateTimer += delta;
-        if (animateTimer > 8) {
-            animateTimer = 0f;
-            System.out.println("МИЛИТАРИСМОЛЛ ПОШЕЛ");
+        animateTime += delta;
+        if (animateTimer[0] < animateTime) {
+            animateTimer[0] += Math.sqrt(animateTimer[0]);
             MilitarySmall mMilitarySmallShip = mMilitarySmallPool.obtain();
-            mMilitarySmallShip.speed.set(0, -0.8f);
-            mMilitarySmallShip.pos.set(MathUtils.random(serviceRect.getLeft(), serviceRect.getRight()), serviceRect.getTop());
-            mMilitarySmallShip.set(new Vector2(0, -1.5f), 1f, serviceRect);
+            init(mMilitarySmallShip);
         }
+        if (animateTimer[1] < animateTime) {
+            animateTimer[1] += animateTimer[1];
+            MilitaryMedium mMilitaryMediumShip = mMilitaryMediumPool.obtain();
+            init(mMilitaryMediumShip);
+        }
+
+        if (animateTimer[2] < animateTime) {
+            animateTimer[2] += animateTimer[2];
+            MilitaryLarge mMilitaryLargeShip = mMilitaryLargePool.obtain();
+            init(mMilitaryLargeShip);
+        }
+
+        /* пока убрал колониальный корабль
+        if (animateTimer[3] < animateTime) {
+            animateTimer[3] += animateTimer[3];
+            ColonyShip mColonyShip = mColonyShipPool.obtain();
+            init(mColonyShip);
+        }
+        */
+
+    }
+
+    private void init(Ship ship) {
+        ship.pos.set(MathUtils.random(serviceRect.getLeft(), serviceRect.getRight()), serviceRect.getTop());
+        ship.set(serviceRect);
     }
 
     public void deleteAllDestroyed() {
         bulletPool.freeAllDestroyedActiveSprites();
         mMilitarySmallPool.freeAllDestroyedActiveSprites();
+        mMilitaryMediumPool.freeAllDestroyedActiveSprites();
+        mMilitaryLargePool.freeAllDestroyedActiveSprites();
+        mColonyShipPool.freeAllDestroyedActiveSprites();
     }
 
     public void draw(float delta) {
@@ -105,6 +137,9 @@ public class GameScreen extends BasicScreen {
         mViking.draw(batch);
         bulletPool.drawActiveSprites(batch);
         mMilitarySmallPool.drawActiveSprites(batch);
+        mMilitaryMediumPool.drawActiveSprites(batch);
+        mMilitaryLargePool.drawActiveSprites(batch);
+        mColonyShipPool.drawActiveSprites(batch);
         batch.end();
     }
 
@@ -170,6 +205,9 @@ public class GameScreen extends BasicScreen {
         rainMusic.dispose();
         bulletPool.dispose();
         mMilitarySmallPool.dispose();
+        mColonyShipPool.dispose();
+        mMilitaryLargePool.dispose();
+        mMilitaryMediumPool.dispose();
         super.dispose();
     }
 

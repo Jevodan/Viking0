@@ -5,10 +5,16 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import java.util.ArrayList;
 import java.util.List;
 
+import ru.jevo.animation.pools.weapons.BulletPool;
+import ru.jevo.animation.pools.weapons.SimpleBlasterPool;
+
 /**
  * Created by Alexander on 08.12.2018.
  */
 public abstract class Pool<T extends Sprite> {
+
+    protected BulletPool mBulletPool;
+    protected SimpleBlasterPool mBlasterPool;
 
     // активный пул спрайтов T
     protected List<T> activePool = new ArrayList<T>();

@@ -4,20 +4,26 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
+import ru.jevo.animation.pools.weapons.BulletPool;
+import ru.jevo.animation.pools.weapons.SimpleBlasterPool;
 import ru.jevo.animation.service.Rect;
 
 /**
  * Created by Alexander on 03.12.2018.
  */
-public class Ship extends Sprite {
+public abstract class Ship extends Sprite {
 
-    public static final int ENEMY_COUNT = 5;
     protected float speedFire = 0;
     protected float animateTimer = 0;
     protected Fireable fireBehavior;
     protected TextureAtlas enemyTextureAtlas;
+    protected TextureAtlas mainTextureAtlas = new TextureAtlas("atlas/mainAtlas.tpack");
+    protected TextureRegion region;
+    protected BulletPool bulletPool;
+    protected SimpleBlasterPool BlasterPool;
 
     public void setFireBehavior(Fireable fireBehavior) {
         this.fireBehavior = fireBehavior;
@@ -27,15 +33,8 @@ public class Ship extends Sprite {
         return speedFire;
     }
 
-
-    // public Fire[] shipFire;
     public Vector2 speed = new Vector2();
     protected Vector2 speedVector = new Vector2();
-
-    // TODO добавить ускорение
-    // TODO проработать скорость
-    // TODO сделать огонь
-    // TODO изучить delta
 
     public Ship(TextureRegion region) {
         super(region);
@@ -59,24 +58,7 @@ public class Ship extends Sprite {
     public Ship(){
         this.enemyTextureAtlas = new TextureAtlas("atlas/enemy1/enemy_pack1.atlas");
     }
-
-    public void set(
-            Vector2 speedShip,
-            float height,
-            Rect serviceRect
-    ) {
-
-
-      //  System.out.println(region);
-        this.regions[0] = getAtlas().findRegion("family5/military_small");
-       // this.pos.set(m.pos.x, owner.getTop());
-        this.speed.set(speedShip);
-        setHeightProportion(height);
-        this.mServiceRect = serviceRect;
-
-       // dropSound.play();
-    }
-
+    public void set(Rect serviceRect) {  this.mServiceRect = serviceRect; }
 
     public void performFire(SpriteBatch batch) {
         fireBehavior.fire(batch);
@@ -87,5 +69,12 @@ public class Ship extends Sprite {
     public void resize(Rect serviceRect) {
         super.resize(serviceRect);
     }
+
+    public abstract TextureRegion getRegion();
+
+    public TextureAtlas getMainTextureAtlas() {
+        return mainTextureAtlas;
+    }
+
 
 }

@@ -2,6 +2,7 @@ package ru.jevo.animation.sprites.ships;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.jevo.animation.basic.Ship;
@@ -16,8 +17,6 @@ public class Viking extends Ship {
 
     private boolean pressedLeft;
     private boolean pressedRight;
-
-    private BulletPool bulletPool;
     private TextureAtlas atlas;
 
     public Viking(TextureAtlas atlas, BulletPool bulletPool) {
@@ -38,6 +37,11 @@ public class Viking extends Ship {
     }
 
     @Override
+    public TextureRegion getRegion() {
+        return this.enemyTextureAtlas.findRegion("viking");
+    }
+
+    @Override
     public void update(float delta) {
         super.update(delta);
         check();
@@ -45,7 +49,6 @@ public class Viking extends Ship {
     }
 
     private void check() {
-      //  System.out.println(this.getHalfWidth() + "  " + this.pos.y);
         if (pos.x + this.getHalfWidth() > mServiceRect.getHalfWidth()) {
             stop();
             pos.x -= 0.01f;
@@ -66,7 +69,6 @@ public class Viking extends Ship {
 
     @Override
     public boolean touchUp(Vector2 touch, int pointer) {
-        System.out.println("движение вверх");
         return super.touchUp(touch, pointer);
 
     }
@@ -131,8 +133,15 @@ public class Viking extends Ship {
 
     private void shoot() {
         System.out.println("огонь");
-        Bullet bullet = bulletPool.obtain();
-        bullet.set(this, atlas.findRegion("bulletMainShip"), new Vector2(0, 2.5f), 0.1f, mServiceRect, 1);
+
+        float angleRot = -90f;
+        for (int i = 0; i < 3; i++) {
+            Bullet bullet = bulletPool.obtain();
+            angleRot += 45f;
+            System.out.println("Угол:" + angleRot);
+            bullet.setSpeedBul(bullet.getSpeedBul().rotate(angleRot));
+            bullet.set(this, atlas.findRegion("bulletMainShip"),  0.1f, mServiceRect, 1);
+        }
     }
 
 }

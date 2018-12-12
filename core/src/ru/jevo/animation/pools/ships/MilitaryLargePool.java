@@ -2,20 +2,20 @@ package ru.jevo.animation.pools.ships;
 
 import ru.jevo.animation.basic.Pool;
 import ru.jevo.animation.pools.weapons.BulletPool;
+import ru.jevo.animation.sprites.ships.MilitaryLarge;
 import ru.jevo.animation.sprites.ships.MilitarySmall;
-
 
 /**
  * Created by Alexander on 08.12.2018.
  */
-public class MilitarySmallPool extends Pool<MilitarySmall> {
+public class MilitaryLargePool extends Pool<MilitaryLarge> {
 
-    public MilitarySmallPool(BulletPool bulletPool) {
+    public MilitaryLargePool(BulletPool bulletPool) {
         this.mBulletPool = bulletPool;
-
     }
+
     @Override
-    protected MilitarySmall newObject() {
-        return new MilitarySmall(mBulletPool);
+    protected MilitaryLarge newObject() {
+        return new MilitaryLarge(mBulletPool);
     }
 }
