@@ -14,10 +14,10 @@ import ru.jevo.animation.service.Rect;
 public class Bullet extends Sprite {
 
     private Ship owner;
-    private int damage;
+    private int damage = 50;
 
     private Vector2 speedBul = new Vector2(0, 2.5f);
-    Sound dropSound = Gdx.audio.newSound(Gdx.files.internal("sounds/weapon1_blaster.wav"));;
+    Sound dropSound = Gdx.audio.newSound(Gdx.files.internal("sounds/weapon1_blaster.wav"));
 
 
     public Bullet() {
@@ -28,8 +28,7 @@ public class Bullet extends Sprite {
             Ship owner,
             TextureRegion region,
             float height,
-            Rect serviceRect,
-            int damage
+            Rect serviceRect
     ) {
         this.owner = owner;
         this.regions[0] = region;

@@ -19,6 +19,7 @@ public class MilitaryLarge extends Ship {
         this.speed.set(0, -0.5f);
         setHeightProportion(1f);
         this.bulletPool = bulletPool;
+        this.hP = 50;
 
     }
 
@@ -51,7 +52,7 @@ public class MilitaryLarge extends Ship {
         Bullet bullet = bulletPool.obtain();
         System.out.println(getMainTextureAtlas().findRegion("bulletEnemy"));
         bullet.setSpeedBul(bullet.getSpeedBul().rotate(180));
-        bullet.set(this, getMainTextureAtlas().findRegion("bulletEnemy"),  0.1f, mServiceRect, 1);
+        bullet.set(this, getMainTextureAtlas().findRegion("bulletEnemy"),  0.1f, mServiceRect);
 
     }
 

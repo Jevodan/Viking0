@@ -2,7 +2,6 @@ package ru.jevo.animation.basic;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
@@ -14,14 +13,10 @@ import com.badlogic.gdx.math.Matrix3;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 
-import ru.jevo.animation.GameViking;
 import ru.jevo.animation.service.MatrixUtils;
 import ru.jevo.animation.service.Rect;
-import ru.jevo.animation.sprites.Background;
-import ru.jevo.animation.sprites.Star;
-
-import static com.badlogic.gdx.Input.Keys.ALT_LEFT;
-import static com.badlogic.gdx.Input.Keys.LEFT;
+import ru.jevo.animation.sprites.other.Background;
+import ru.jevo.animation.sprites.other.Star;
 
 /**
  * Created by Alexander on 25.11.2018.
@@ -36,6 +31,7 @@ public class BasicScreen implements Screen, InputProcessor {
 
     final protected Music rainMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/main.mp3"));
     protected Texture bgTexture;
+    protected TextureAtlas mainTextureAtlas;
     protected TextureAtlas menuTextureAtlas;
     protected Background mBackground;
     protected Star[] mStar;
@@ -64,6 +60,8 @@ public class BasicScreen implements Screen, InputProcessor {
     public void show() {
         batch = new SpriteBatch();
         Gdx.input.setInputProcessor(this);
+        menuTextureAtlas = new TextureAtlas("atlas/menuAtlas.tpack");
+        mainTextureAtlas = new TextureAtlas("atlas/mainAtlas.tpack");
     }
 
     @Override

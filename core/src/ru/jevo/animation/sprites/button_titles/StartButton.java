@@ -1,4 +1,4 @@
-package ru.jevo.animation.sprites;
+package ru.jevo.animation.sprites.button_titles;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -18,14 +18,16 @@ public class StartButton extends Button {
     public StartButton(TextureAtlas atlas, Game game) {
         super(atlas.findRegion("btPlay"));
         this.mGame = game;
-        setHeightProportion(4f);
-        pos.set(0, 1f);
+        setHeightProportion(2f);
+        pos.set(-3.2f + getHalfWidth(), -4.6f + getHalfHeight());
     }
 
+    /*
     @Override
     public void resize(Rect serviceRect) {
         super.resize(serviceRect);
     }
+    */
 
     @Override
     protected void actionPerformed() {

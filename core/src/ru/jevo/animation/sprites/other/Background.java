@@ -1,4 +1,4 @@
-package ru.jevo.animation.sprites;
+package ru.jevo.animation.sprites.other;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 

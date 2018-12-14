@@ -21,6 +21,7 @@ public class MilitarySmall extends Ship {
         setHeightProportion(1f);
         this.bulletPool = bulletPool;
         this.speedFire = 1f;
+        this.hP = 5;
     }
 
     public TextureRegion getRegion() {
@@ -49,7 +50,8 @@ public class MilitarySmall extends Ship {
         System.out.println("огонь врага");
         Bullet bullet = bulletPool.obtain();
         bullet.setSpeedBul(bullet.getSpeedBul().rotate(180));
-        bullet.set(this, getMainTextureAtlas().findRegion("bulletEnemy"), 0.1f, mServiceRect, 1);
+        bullet.set(this, getMainTextureAtlas().findRegion("bulletEnemy"), 0.1f, mServiceRect);
 
     }
+
 }

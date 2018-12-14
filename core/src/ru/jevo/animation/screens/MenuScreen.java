@@ -1,35 +1,29 @@
 package ru.jevo.animation.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.jevo.animation.GameViking;
 import ru.jevo.animation.basic.BasicScreen;
-import ru.jevo.animation.basic.Sprite;
-import ru.jevo.animation.service.Anima;
-import ru.jevo.animation.service.LineAlg;
-import ru.jevo.animation.sprites.Background;
-import ru.jevo.animation.sprites.ExitButton;
-import ru.jevo.animation.sprites.Star;
-import ru.jevo.animation.sprites.StartButton;
+import ru.jevo.animation.service.Regions;
+import ru.jevo.animation.sprites.other.Background;
+import ru.jevo.animation.sprites.button_titles.ExitButton;
+import ru.jevo.animation.sprites.other.Star;
+import ru.jevo.animation.sprites.button_titles.StartButton;
+import ru.jevo.animation.sprites.ships.Viking;
 
 /**
  * Created by Alexander on 25.11.2018.
  */
 public class MenuScreen extends BasicScreen {
 
-    private Texture mTitle;
     private StartButton mStartButton;
     private ExitButton mExitButton;
+    private Viking mViking;
 
     public MenuScreen(GameViking game) {
         super(game);
@@ -38,8 +32,9 @@ public class MenuScreen extends BasicScreen {
     @Override
     public void show() {
         super.show();
+        mViking =  new Viking(mainTextureAtlas,null);
+        mViking.setScale(3f);
         bgTexture = new Texture("images/bg.png");
-        menuTextureAtlas = new TextureAtlas("atlas/menuAtlas.tpack");
         mBackground = new Background(new TextureRegion(bgTexture));
         rainMusic.setLooping(true); // повторение музыки
         rainMusic.play();
@@ -48,8 +43,6 @@ public class MenuScreen extends BasicScreen {
             mStar[i] = new Star(menuTextureAtlas);
         mStartButton = new StartButton(menuTextureAtlas, game);
         mExitButton = new ExitButton(menuTextureAtlas);
-
-        //  Anima.setTexture(); заполняем массив текстурами спрайта моего крейсера
     }
 
     @Override
@@ -81,6 +74,7 @@ public class MenuScreen extends BasicScreen {
             mStar[i].draw(batch);
         mStartButton.draw(batch);
         mExitButton.draw(batch);
+        mViking.draw(batch);
         batch.end();
     }
 

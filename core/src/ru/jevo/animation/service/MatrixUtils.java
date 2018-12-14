@@ -32,7 +32,7 @@ public class MatrixUtils {
      */
     public static void calcTransitionMatrix(Matrix3 mat, Rect src, Rect dst) {
         System.out.println("изначальный экран,размеры: " + src.getWidth()  + " " + src.getHeight());
-        System.out.println("новый экран,размеры: " + dst.getWidth()  + " " + dst.getHeight());
+        System.out.println("новый экран,размеры: " + dst.getClass() + dst.getWidth()  + " " + dst.getHeight());
         float scaleX = dst.getWidth() / src.getWidth();
         float scaleY = dst.getHeight() / src.getHeight();
      //   mat.idt().translate(dst.pos.x, dst.pos.y).scale(scaleX, scaleY).translate(-src.pos.x, -src.pos.y);

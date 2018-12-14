@@ -20,6 +20,7 @@ public abstract class Sprite extends Rect {
     protected int currentFrame;
     protected Rect mServiceRect;
     private boolean isDestroyed;
+    protected float timerAnimation;
 
     public Sprite() {
     }

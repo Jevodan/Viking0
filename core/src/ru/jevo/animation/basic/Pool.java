@@ -28,7 +28,7 @@ public abstract class Pool<T extends Sprite> {
         if (passivePool.isEmpty())
             poolObj = newObject();
         else
-            poolObj = passivePool.remove(passivePool.size() - 1);
+            poolObj = passivePool.remove(0);
         activePool.add(poolObj);
         System.out.println("active/free:"+activePool.size() + "/" + passivePool.size());
         return poolObj;

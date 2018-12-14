@@ -15,9 +15,13 @@ import ru.jevo.animation.sprites.weapon.Bullet;
  */
 public class Viking extends Ship {
 
+    public static final int DAMAGE_TARAN = 100;
+
     private boolean pressedLeft;
     private boolean pressedRight;
     private TextureAtlas atlas;
+
+    private int hP = 100;
 
     public Viking(TextureAtlas atlas, BulletPool bulletPool) {
         super(atlas.findRegion("viking"), 1, 2, 2);
@@ -140,8 +144,23 @@ public class Viking extends Ship {
             angleRot += 45f;
             System.out.println("Угол:" + angleRot);
             bullet.setSpeedBul(bullet.getSpeedBul().rotate(angleRot));
-            bullet.set(this, atlas.findRegion("bulletMainShip"),  0.1f, mServiceRect, 1);
+            bullet.set(this, atlas.findRegion("bulletMainShip"),  0.1f, mServiceRect);
         }
+    }
+
+    public int gethP() {
+        return hP;
+    }
+
+    public void sethP(int hP) {
+        this.hP = hP;
+    }
+
+    public boolean isBulletCollision(Rect bullet) {
+        return !(bullet.getRight() < getLeft()
+                || bullet.getLeft() > getRight()
+                || bullet.getBottom() > pos.y
+                || bullet.getTop() < getBottom());
     }
 
 }

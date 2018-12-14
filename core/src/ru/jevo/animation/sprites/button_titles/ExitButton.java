@@ -1,4 +1,4 @@
-package ru.jevo.animation.sprites;
+package ru.jevo.animation.sprites.button_titles;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -16,7 +16,8 @@ public class ExitButton extends Button {
     public ExitButton(TextureAtlas region) {
         super(region.findRegion("btExit"));
         setHeightProportion(1.5f);
-        pos.set(0, - 5 * halfHeight);
+        System.out.println(getHeight());
+        pos.set(3.2f - getHalfWidth(), -4.6f + getHalfHeight());
     }
 
     @Override
