@@ -77,6 +77,7 @@ public abstract class Ship extends Sprite {
         sethP(gethP() - damage);
         if (gethP() <=0 && this.isDestroyed() == false) {
             this.setDestroyed(true);
+         //   this.sethP(10);
             boom(exp);
             GameScreen.mFrags++;
         }
