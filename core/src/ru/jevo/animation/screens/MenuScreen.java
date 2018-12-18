@@ -32,7 +32,7 @@ public class MenuScreen extends BasicScreen {
     @Override
     public void show() {
         super.show();
-        mViking =  new Viking(mainTextureAtlas,null);
+        mViking =  new Viking(mainTextureAtlas,"bullet");
         mViking.setScale(3f);
         bgTexture = new Texture("images/bg.png");
         mBackground = new Background(new TextureRegion(bgTexture));

@@ -3,7 +3,9 @@ package ru.jevo.animation.sprites.ships;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+import ru.jevo.animation.basic.Pool;
 import ru.jevo.animation.basic.Ship;
+import ru.jevo.animation.basic.Weapon;
 import ru.jevo.animation.pools.weapons.BulletPool;
 import ru.jevo.animation.sprites.weapon.Bullet;
 
@@ -12,13 +14,15 @@ import ru.jevo.animation.sprites.weapon.Bullet;
  */
 public class MilitaryLarge extends Ship {
 
-    public MilitaryLarge(BulletPool bulletPool) {
+    public MilitaryLarge(Pool weaponPool, String weapon) {
+        this.weaponPool = weaponPool;
+        this.weaponEnum = weapon;
         regions = new TextureRegion[1];
         regions[0] = this.getRegion();
         setAngle(180);
         this.speed.set(0, -0.5f);
         setHeightProportion(1f);
-        this.bulletPool = bulletPool;
+
         this.hP = 50;
 
     }
@@ -48,11 +52,9 @@ public class MilitaryLarge extends Ship {
     }
 
     private void shoot() {
-        System.out.println("огонь врага");
-        Bullet bullet = bulletPool.obtain();
-        System.out.println(getMainTextureAtlas().findRegion("bulletEnemy"));
-        bullet.setSpeedBul(bullet.getSpeedBul().rotate(180));
-        bullet.set(this, getMainTextureAtlas().findRegion("bulletEnemy"),  0.1f, mServiceRect);
+        weapon = (Weapon) weaponPool.obtain();
+        weapon.setSpeedBul(weapon.getSpeedBul().rotate(180));
+        weapon.set(this, getMainTextureAtlas().findRegion("bulletEnemy"),  0.1f, mServiceRect, true, 10);
 
     }
 

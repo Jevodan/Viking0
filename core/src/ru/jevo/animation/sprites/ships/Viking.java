@@ -5,10 +5,15 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
+import ru.jevo.animation.Weapons;
+import ru.jevo.animation.basic.Pool;
 import ru.jevo.animation.basic.Ship;
+import ru.jevo.animation.basic.Weapon;
 import ru.jevo.animation.pools.weapons.BulletPool;
 import ru.jevo.animation.service.Rect;
 import ru.jevo.animation.sprites.weapon.Bullet;
+import ru.jevo.animation.sprites.weapon.Laser;
+import ru.jevo.animation.sprites.weapon.Mega;
 
 /**
  * Created by Alexander on 03.12.2018.
@@ -23,13 +28,28 @@ public class Viking extends Ship {
 
     private int hP = 100;
 
-    public Viking(TextureAtlas atlas, BulletPool bulletPool) {
+    public Viking(TextureAtlas atlas, String weapon) {
         super(atlas.findRegion("viking"), 1, 2, 2);
+        this.weaponEnum = weapon;
         setHeightProportion(1f);
         setAngle(0);
         speedVector.set(1.5f, 0);
-        this.bulletPool = bulletPool;
+        createWeapon(weapon);
         this.atlas = atlas;
+
+    }
+
+
+    private void createWeapon(String item) {
+        if (item.equals("bullet")) {
+            weaponPool = BulletPool.getInstance();
+        } else if (item.equals("blaster")) {
+            weaponPool = BulletPool.getInstance();
+        } else if (item.equals("mega")) {
+            weaponPool = BulletPool.getInstance();
+        } else if (item.equals("bullet")) {
+            weaponPool = BulletPool.getInstance();
+        }
     }
 
 
@@ -41,14 +61,10 @@ public class Viking extends Ship {
     }
 
     @Override
-    public TextureRegion getRegion() {
-        return this.enemyTextureAtlas.findRegion("viking");
-    }
-
-    @Override
     public void update(float delta) {
         super.update(delta);
         check();
+        speedFire += delta;
         pos.mulAdd(speed, delta); //скорость привязана к частоте кадров
     }
 
@@ -115,7 +131,10 @@ public class Viking extends Ship {
                     stop();
                 break;
             case Input.Keys.UP:
-                shoot();
+                if (speedFire > 1f) {
+                    shoot();
+                    speedFire = 0;
+                }
                 break;
         }
         return false;
@@ -127,12 +146,13 @@ public class Viking extends Ship {
 
     private void goRight() {
         speed.set(speedVector);
+        //currentFrame = 0;
     }
 
     private void goLeft() {
         speed.set(speedVector).rotate(180);
         System.out.println(mServiceRect.getHalfWidth());
-        //  currentFrame = 1;
+        //currentFrame = 1;
     }
 
     private void shoot() {
@@ -140,12 +160,14 @@ public class Viking extends Ship {
 
         float angleRot = -90f;
         for (int i = 0; i < 3; i++) {
-            Bullet bullet = bulletPool.obtain();
+            weapon = (Weapon) weaponPool.obtain();
+            //    Weapon bullet = bulletPool.obtain();
             angleRot += 45f;
             System.out.println("Угол:" + angleRot);
-            bullet.setSpeedBul(bullet.getSpeedBul().rotate(angleRot));
-            bullet.set(this, atlas.findRegion("bulletMainShip"),  0.1f, mServiceRect);
+            weapon.setSpeedBul(weapon.getSpeedBul().cpy().rotate(angleRot));
+            weapon.set(this, atlas.findRegion("bulletMainShip"), 0.1f, mServiceRect, false, 5);
         }
+
     }
 
     public int gethP() {
@@ -162,5 +184,12 @@ public class Viking extends Ship {
                 || bullet.getBottom() > pos.y
                 || bullet.getTop() < getBottom());
     }
+
+
+    @Override
+    protected TextureRegion getRegion() {
+        return this.enemyTextureAtlas.findRegion("viking");
+    }
+
 
 }

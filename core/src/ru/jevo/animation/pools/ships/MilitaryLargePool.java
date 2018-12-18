@@ -10,12 +10,25 @@ import ru.jevo.animation.sprites.ships.MilitarySmall;
  */
 public class MilitaryLargePool extends Pool<MilitaryLarge> {
 
-    public MilitaryLargePool(BulletPool bulletPool) {
-        this.mBulletPool = bulletPool;
+    private static String weapon;
+    private Pool weaponPool;
+
+    private static MilitaryLargePool instance;
+
+    public static synchronized MilitaryLargePool getInstance(String weapon) {
+        if (instance == null) {
+            instance = new MilitaryLargePool(weapon);
+        }
+        return instance;
+    }
+
+    private MilitaryLargePool(String weapon) {
+        this.weapon = weapon;
+        this.weaponPool = this.createPool(weapon);
     }
 
     @Override
     protected MilitaryLarge newObject() {
-        return new MilitaryLarge(mBulletPool);
+        return new MilitaryLarge(weaponPool, weapon);
     }
 }

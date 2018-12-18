@@ -1,6 +1,7 @@
 package ru.jevo.animation.pools.ships;
 
 import ru.jevo.animation.basic.Pool;
+import ru.jevo.animation.basic.test;
 import ru.jevo.animation.pools.weapons.BulletPool;
 import ru.jevo.animation.sprites.ships.MilitarySmall;
 
@@ -10,12 +11,25 @@ import ru.jevo.animation.sprites.ships.MilitarySmall;
  */
 public class MilitarySmallPool extends Pool<MilitarySmall> {
 
-    public MilitarySmallPool(BulletPool bulletPool) {
-        this.mBulletPool = bulletPool;
+    private static String weapon;
+    private Pool weaponPool;
 
+    private static MilitarySmallPool instance;
+
+    public static synchronized MilitarySmallPool getInstance(String weapon) {
+        if (instance == null) {
+            instance = new MilitarySmallPool(weapon);
+        }
+        return instance;
     }
+
+    private MilitarySmallPool(String weapon) {
+        this.weapon = weapon;
+        this.weaponPool = this.createPool(weapon);
+    }
+
     @Override
     protected MilitarySmall newObject() {
-        return new MilitarySmall(mBulletPool);
+        return new MilitarySmall(weaponPool, weapon);
     }
 }

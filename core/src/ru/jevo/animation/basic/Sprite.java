@@ -19,7 +19,7 @@ public abstract class Sprite extends Rect {
     protected TextureRegion[] regions;
     protected int currentFrame;
     protected Rect mServiceRect;
-    private boolean isDestroyed;
+    protected boolean isDestroyed;
     protected float timerAnimation;
 
     public Sprite() {
@@ -93,7 +93,6 @@ public abstract class Sprite extends Rect {
     }
 
     public void setDestroyed(boolean destroyed) {
-
-        isDestroyed = destroyed;
+        this.isDestroyed = destroyed;
     }
 }

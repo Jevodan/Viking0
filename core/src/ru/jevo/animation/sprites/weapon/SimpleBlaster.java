@@ -7,14 +7,14 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.jevo.animation.basic.Fire;
-import ru.jevo.animation.basic.Fireable;
 import ru.jevo.animation.basic.Ship;
+import ru.jevo.animation.basic.Weapon;
 import ru.jevo.animation.service.Rect;
 
 /**
  * Created by Alexander on 03.12.2018.
  */
-public class SimpleBlaster extends Fire implements Fireable {
+public class SimpleBlaster extends Weapon {
 
     private Ship owner;
     private int damage;
@@ -23,17 +23,9 @@ public class SimpleBlaster extends Fire implements Fireable {
 
 
     public SimpleBlaster() {
-        super(mainTextureAtlas.findRegion("bulletEnemy"));
-        this.shipRect = shipRect;
-        setHeightProportion(0.2f);
-
-        speed.set(0, -1.3f);
+        regions = new TextureRegion[1];
     }
 
-    @Override
-    public void fire(SpriteBatch batch) {
-        super.draw(batch);
-    }
 
     @Override
     public void resize(Rect shipRect) {
@@ -45,7 +37,7 @@ public class SimpleBlaster extends Fire implements Fireable {
     @Override
     public void update(float delta) {
           super.update(delta);
-        pos.mulAdd(speed, delta); //скорость привязана к частоте кадров
+        pos.mulAdd(speedBul, delta); //скорость привязана к частоте кадров
       //  System.out.println(speed);
     }
 

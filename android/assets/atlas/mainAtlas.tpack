@@ -80,3 +80,24 @@ star
   orig: 11, 10
   offset: 0, 0
   index: -1
+blaster
+    rotate: false
+    xy: 1707, 591
+    size: 14, 21
+    orig: 14, 21
+    offset: 0, 0
+    index: -1
+laser
+    rotate: false
+    xy: 1671, 634
+    size: 5, 32
+    orig: 5, 32
+    offset: 0, 0
+    index: -1
+mega
+    rotate: false
+    xy: 1416, 100
+    size: 59, 56
+    orig: 59, 56
+    offset: 0, 0
+    index: -1

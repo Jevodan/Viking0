@@ -4,12 +4,11 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-
 import ru.jevo.animation.pools.other.ExplosionPool;
 import ru.jevo.animation.pools.weapons.BulletPool;
 import ru.jevo.animation.pools.weapons.SimpleBlasterPool;
+import ru.jevo.animation.screens.GameScreen;
 import ru.jevo.animation.service.Rect;
 import ru.jevo.animation.sprites.other.Explosion;
 
@@ -21,18 +20,15 @@ public abstract class Ship extends Sprite {
     protected ExplosionPool mExplosionPool;
     protected float speedFire = 0;
     protected float animateTimer = 0;
-    protected Fireable fireBehavior;
     protected TextureAtlas enemyTextureAtlas;
     protected TextureAtlas mainTextureAtlas = new TextureAtlas("atlas/mainAtlas.tpack");
     protected TextureRegion region;
-    protected BulletPool bulletPool;
+    protected Pool weaponPool;
     protected SimpleBlasterPool BlasterPool;
+    protected Weapon weapon;
+    protected String weaponEnum;
 
     protected int hP;
-
-    public void setFireBehavior(Fireable fireBehavior) {
-        this.fireBehavior = fireBehavior;
-    }
 
     public float getSpeedFire() {
         return speedFire;
@@ -44,11 +40,6 @@ public abstract class Ship extends Sprite {
     public Ship(TextureRegion region) {
         super(region);
         setAngle(180);
-    }
-
-    public Fireable getFireBehavior() {
-
-        return fireBehavior;
     }
 
     public TextureAtlas getAtlas() {
@@ -65,17 +56,12 @@ public abstract class Ship extends Sprite {
     }
     public void set(Rect serviceRect) {  this.mServiceRect = serviceRect; }
 
-    public void performFire(SpriteBatch batch) {
-        fireBehavior.fire(batch);
-    }
-
-
     @Override
     public void resize(Rect serviceRect) {
         super.resize(serviceRect);
     }
 
-    public abstract TextureRegion getRegion();
+    protected abstract TextureRegion getRegion();
 
     public TextureAtlas getMainTextureAtlas() {
         return mainTextureAtlas;
@@ -89,9 +75,10 @@ public abstract class Ship extends Sprite {
 
     public void damage(int damage, ExplosionPool exp) {
         sethP(gethP() - damage);
-        if (gethP() <=0) {
+        if (gethP() <=0 && this.isDestroyed() == false) {
             this.setDestroyed(true);
             boom(exp);
+            GameScreen.mFrags++;
         }
     }
 
@@ -109,5 +96,14 @@ public abstract class Ship extends Sprite {
                 || bullet.getBottom() > getTop()
                 || bullet.getTop() < pos.y);
     }
+
+/*
+    public Weapon initWeapon(String typeWeapon) {
+        weapon = createWeapon(typeWeapon);
+        return weapon;
+    }
+
+    protected abstract Weapon createWeapon(String typeWeapon);
+*/
 
 }

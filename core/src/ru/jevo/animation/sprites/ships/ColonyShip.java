@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import ru.jevo.animation.basic.Ship;
+import ru.jevo.animation.basic.Weapon;
 import ru.jevo.animation.pools.weapons.SimpleBlasterPool;
 import ru.jevo.animation.sprites.weapon.Bullet;
 import ru.jevo.animation.sprites.weapon.SimpleBlaster;
@@ -26,6 +27,7 @@ public class ColonyShip extends Ship {
     public TextureRegion getRegion(){
         return this.enemyTextureAtlas.findRegion("family5/colonyship");
     }
+
 
     @Override
     public void draw(SpriteBatch batch) {

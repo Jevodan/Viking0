@@ -10,12 +10,26 @@ import ru.jevo.animation.sprites.ships.MilitarySmall;
  */
 public class MilitaryMediumPool extends Pool<MilitaryMedium> {
 
-    public MilitaryMediumPool(BulletPool bulletPool) {
-        this.mBulletPool = bulletPool;
+    private static String weapon;
+    private Pool weaponPool;
+
+    private static MilitaryMediumPool instance;
+
+    public static synchronized MilitaryMediumPool getInstance(String weapon) {
+        if (instance == null) {
+            instance = new MilitaryMediumPool(weapon);
+        }
+        return instance;
+    }
+
+    private MilitaryMediumPool(String weapon) {
+        this.weapon = weapon;
+        this.weaponPool = this.createPool(weapon);
     }
 
     @Override
     protected MilitaryMedium newObject() {
-        return new MilitaryMedium(mBulletPool);
+        return new MilitaryMedium(weaponPool, weapon);
     }
+    
 }
