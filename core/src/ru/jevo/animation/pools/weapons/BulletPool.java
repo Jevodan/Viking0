@@ -18,7 +18,6 @@ public class BulletPool extends Pool<Bullet> {
         return instance;
     }
 
-
     @Override
     protected Bullet newObject() {
         return new Bullet();

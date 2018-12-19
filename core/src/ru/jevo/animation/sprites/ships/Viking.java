@@ -10,10 +10,16 @@ import ru.jevo.animation.basic.Pool;
 import ru.jevo.animation.basic.Ship;
 import ru.jevo.animation.basic.Weapon;
 import ru.jevo.animation.pools.weapons.BulletPool;
+import ru.jevo.animation.pools.weapons.LazerPool;
+import ru.jevo.animation.pools.weapons.SimpleBlasterPool;
 import ru.jevo.animation.service.Rect;
 import ru.jevo.animation.sprites.weapon.Bullet;
 import ru.jevo.animation.sprites.weapon.Laser;
 import ru.jevo.animation.sprites.weapon.Mega;
+
+import static ru.jevo.animation.basic.Const.BULLET;
+import static ru.jevo.animation.basic.Const.LAZER;
+import static ru.jevo.animation.basic.Const.SIMPLE_BLASTER;
 
 /**
  * Created by Alexander on 03.12.2018.
@@ -24,32 +30,18 @@ public class Viking extends Ship {
 
     private boolean pressedLeft;
     private boolean pressedRight;
-    private TextureAtlas atlas;
+
+    private Vector2 ukaz = new Vector2();
 
     private int hP = 100;
 
     public Viking(TextureAtlas atlas, String weapon) {
         super(atlas.findRegion("viking"), 1, 2, 2);
         this.weaponEnum = weapon;
-        setHeightProportion(1f);
+        setHeightProportion(1.2f);
         setAngle(0);
         speedVector.set(1.5f, 0);
         createWeapon(weapon);
-        this.atlas = atlas;
-
-    }
-
-
-    private void createWeapon(String item) {
-        if (item.equals("bullet")) {
-            weaponPool = BulletPool.getInstance();
-        } else if (item.equals("blaster")) {
-            weaponPool = BulletPool.getInstance();
-        } else if (item.equals("mega")) {
-            weaponPool = BulletPool.getInstance();
-        } else if (item.equals("bullet")) {
-            weaponPool = BulletPool.getInstance();
-        }
     }
 
 
@@ -65,7 +57,12 @@ public class Viking extends Ship {
         super.update(delta);
         check();
         speedFire += delta;
+        timeDamaged += delta;
         pos.mulAdd(speed, delta); //скорость привязана к частоте кадров
+        if (this.getCurrentFrame() == 1 && timeDamaged > 0.5f) {
+            timeDamaged = 0;
+            this.setCurrentFrame(0);
+        }
     }
 
     private void check() {
@@ -82,8 +79,28 @@ public class Viking extends Ship {
 
     @Override
     public boolean touchDown(Vector2 touch, int pointer) {
-        if (pos.x > touch.x) goLeft();
-        if (pos.x < touch.x) goRight();
+/*
+        position.set(sprite.getX(), sprite.getY());
+        dir.set(touch).sub(position).nor();
+        velocity.set(dir).scl(speed);
+        movement.set(velocity).scl(deltaTime);
+        if (position.dst2(touch) > movement.len2()) {
+            position.add(movement);
+        } else {
+            position.set(touch);
+        }
+        sprite.setX(position.x);
+        sprite.setY(position.y);
+*/
+
+        ukaz.set(touch).sub(pos).nor();
+        System.out.println("Направление " + ukaz);
+        //  speedVector.scl(ukaz);
+        speed.set(ukaz).scl(speedVector);
+        pos.add(speed);
+        System.out.println("Скорость" + speed);
+
+
         return super.touchDown(touch, pointer);
     }
 
@@ -131,13 +148,17 @@ public class Viking extends Ship {
                     stop();
                 break;
             case Input.Keys.UP:
-                if (speedFire > 1f) {
-                    shoot();
-                    speedFire = 0;
-                }
+                speedShoot();
                 break;
         }
         return false;
+    }
+
+    private void speedShoot() {
+        if (speedFire > 0.5f) {
+            shoot();
+            speedFire = 0;
+        }
     }
 
     private void stop() {
@@ -146,28 +167,33 @@ public class Viking extends Ship {
 
     private void goRight() {
         speed.set(speedVector);
-        //currentFrame = 0;
+        speedShoot();
     }
 
     private void goLeft() {
         speed.set(speedVector).rotate(180);
-        System.out.println(mServiceRect.getHalfWidth());
-        //currentFrame = 1;
+        speedShoot();
+
+    }
+
+    private void goUp() {
+        speed.set(speedVector).rotate(90);
+        speedShoot();
+    }
+
+    private void goBottom() {
+        speed.set(speedVector).rotate(270);
+        speedShoot();
     }
 
     private void shoot() {
-        System.out.println("огонь");
-
         float angleRot = -90f;
         for (int i = 0; i < 3; i++) {
             weapon = (Weapon) weaponPool.obtain();
-            //    Weapon bullet = bulletPool.obtain();
             angleRot += 45f;
-            System.out.println("Угол:" + angleRot);
             weapon.setSpeedBul(weapon.getSpeedBul().cpy().rotate(angleRot));
-            weapon.set(this, atlas.findRegion("bulletMainShip"), 0.1f, mServiceRect, false, 5);
+            weapon.set(this, mServiceRect, false);
         }
-
     }
 
     public int gethP() {

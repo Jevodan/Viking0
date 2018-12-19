@@ -20,10 +20,10 @@ public class MilitaryLarge extends Ship {
         regions = new TextureRegion[1];
         regions[0] = this.getRegion();
         setAngle(180);
-        this.speed.set(0, -0.5f);
-        setHeightProportion(1f);
-
+        setHeightProportion(1.65f);
+        this.speed.set(0, -0.45f);
         this.hP = 50;
+        createWeapon(weapon);
 
     }
 
@@ -43,7 +43,6 @@ public class MilitaryLarge extends Ship {
         speedFire += delta;
         if (isOutside(mServiceRect))
             setDestroyed(true);
-
         if (speedFire > 0.5f) {
             speedFire = 0;
             shoot();
@@ -54,7 +53,7 @@ public class MilitaryLarge extends Ship {
     private void shoot() {
         weapon = (Weapon) weaponPool.obtain();
         weapon.setSpeedBul(weapon.getSpeedBul().rotate(180));
-        weapon.set(this, getMainTextureAtlas().findRegion("bulletEnemy"),  0.1f, mServiceRect, true, 10);
+        weapon.set(this, mServiceRect, true);
 
     }
 

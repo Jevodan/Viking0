@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import ru.jevo.animation.basic.Ship;
 import ru.jevo.animation.basic.Weapon;
+import ru.jevo.animation.pools.weapons.BlasterPool;
 import ru.jevo.animation.pools.weapons.SimpleBlasterPool;
 import ru.jevo.animation.sprites.weapon.Bullet;
 import ru.jevo.animation.sprites.weapon.SimpleBlaster;
@@ -20,7 +21,7 @@ public class ColonyShip extends Ship {
         setAngle(180);
         this.speed.set(0, -0.3f);
         setHeightProportion(1f);
-        this.BlasterPool = bulletPool;
+     //   this.BlasterPool = bulletPool;
 
     }
 
@@ -54,11 +55,11 @@ public class ColonyShip extends Ship {
 
         float angleRot = -90f;
         for (int i = 0; i < 3; i++) {
-            SimpleBlaster bullet = BlasterPool.obtain();
+          //  SimpleBlaster bullet = BlasterPool.obtain();
             angleRot += 45f;
             System.out.println("Угол:" + angleRot);
-            bullet.setSpeedBul(bullet.getSpeedBul().rotate(angleRot).rotate(180));
-            bullet.set(this, getMainTextureAtlas().findRegion("bulletEnemy"),  0.1f, mServiceRect, 1);
+        //    bullet.setSpeedBul(bullet.getSpeedBul().rotate(angleRot).rotate(180));
+          //  bullet.set(this, 0.1f, mServiceRect, 1);
         }
     }
 

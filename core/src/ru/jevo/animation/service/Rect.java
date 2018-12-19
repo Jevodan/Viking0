@@ -103,6 +103,6 @@ public class Rect {
     }
 
     public boolean isOutside(Rect other) {
-        return getLeft() > other.getRight() || getRight() < other.getLeft() || getBottom() > other.getTop() || getTop() < other.getBottom();
+        return getLeft() > other.getRight() || getRight() < other.getLeft() || getBottom() > other.getTop()+ 1.1f || getTop() < other.getBottom();
     }
 }

@@ -26,7 +26,7 @@ public class MilitarySmall extends Ship {
         regions[0] = this.getRegion();
         setAngle(180);
         this.speed.set(0, -1.2f);
-        setHeightProportion(1f);
+        setHeightProportion(1.1f);
         this.weaponPool = weaponPool;
         this.hP = 5;
     }
@@ -34,7 +34,6 @@ public class MilitarySmall extends Ship {
     public TextureRegion getRegion() {
         return this.enemyTextureAtlas.findRegion("family5/military_small");
     }
-
 
     @Override
     public void draw(SpriteBatch batch) {
@@ -46,8 +45,6 @@ public class MilitarySmall extends Ship {
         super.update(delta);
         pos.mulAdd(speed, delta); //скорость привязана к частоте кадров
         speedFire += delta;
-        if (isOutside(mServiceRect))
-            setDestroyed(true);
         if (speedFire > 2.1f) {
             speedFire = 0;
             shoot();
@@ -57,7 +54,7 @@ public class MilitarySmall extends Ship {
     private void shoot() {
         weapon = (Weapon) weaponPool.obtain();
         weapon.setSpeedBul(weapon.getSpeedBul().rotate(180));
-        weapon.set(this, getMainTextureAtlas().findRegion("bulletEnemy"), 0.1f, mServiceRect, true, 5);
+        weapon.set(this, mServiceRect, true);
     }
 
 }

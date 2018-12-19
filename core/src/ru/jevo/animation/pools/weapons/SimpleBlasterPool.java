@@ -1,6 +1,7 @@
 package ru.jevo.animation.pools.weapons;
 
 import ru.jevo.animation.basic.Pool;
+import ru.jevo.animation.sprites.weapon.Bullet;
 import ru.jevo.animation.sprites.weapon.SimpleBlaster;
 
 /**
@@ -8,8 +9,17 @@ import ru.jevo.animation.sprites.weapon.SimpleBlaster;
  */
 public class SimpleBlasterPool extends Pool<SimpleBlaster> {
 
+    private static SimpleBlasterPool instance;
+
+    public static synchronized SimpleBlasterPool getInstance() {
+        if (instance == null) {
+            instance = new SimpleBlasterPool();
+        }
+        return instance;
+    }    
+    
     @Override
     protected SimpleBlaster newObject() {
-        return null;
+        return new SimpleBlaster() ;
     }
 }

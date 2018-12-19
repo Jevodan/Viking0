@@ -2,6 +2,7 @@ package ru.jevo.animation.basic;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
@@ -17,24 +18,17 @@ public abstract class Weapon extends Sprite {
     protected int damage;
     protected Vector2 speedBul = new Vector2();
     protected Sound dropSound;
+    protected TextureAtlas mainTextureAtlas = new TextureAtlas("atlas/mainAtlas.tpack");
 
 
     public void set(
             Ship owner,
-            TextureRegion region,
-            float height,
             Rect serviceRect,
-            boolean side,
-            int damage
+            boolean side
     ) {
         this.owner = owner;
-        System.out.println(region);
-        this.regions[0] = region;
-
-        this.pos.set(owner.pos.x, (!side) ? owner.getTop(): owner.getBottom());
-        this.setHeightProportion(height);
+        this.pos.set(owner.pos.x, (!side) ? owner.getTop() : owner.getBottom());
         this.mServiceRect = serviceRect;
-        this.damage = damage;
         dropSound.play();
     }
 
@@ -60,6 +54,8 @@ public abstract class Weapon extends Sprite {
     public Ship getOwner() {
         return owner;
     }
+
+    protected abstract TextureRegion getRegion();
 
     public void setOwner(Ship owner) {
         this.owner = owner;

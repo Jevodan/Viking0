@@ -9,13 +9,14 @@ import com.badlogic.gdx.math.Vector2;
 
 import ru.jevo.animation.GameViking;
 import ru.jevo.animation.basic.BasicScreen;
-import ru.jevo.animation.service.Regions;
 import ru.jevo.animation.sprites.other.Background;
 import ru.jevo.animation.sprites.button_titles.ExitButton;
 import ru.jevo.animation.sprites.other.Star;
 import ru.jevo.animation.sprites.button_titles.StartButton;
 import ru.jevo.animation.sprites.ships.Viking;
 
+import static ru.jevo.animation.basic.Const.STAR_COUNT;
+import static ru.jevo.animation.basic.Const.mainTextureAtlas;
 /**
  * Created by Alexander on 25.11.2018.
  */
@@ -38,9 +39,6 @@ public class MenuScreen extends BasicScreen {
         mBackground = new Background(new TextureRegion(bgTexture));
         rainMusic.setLooping(true); // повторение музыки
         rainMusic.play();
-        mStar = new Star[STAR_COUNT];
-        for (int i = 0; i < STAR_COUNT; i++)
-            mStar[i] = new Star(menuTextureAtlas);
         mStartButton = new StartButton(menuTextureAtlas, game);
         mExitButton = new ExitButton(menuTextureAtlas);
     }

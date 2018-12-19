@@ -12,7 +12,7 @@ import ru.jevo.animation.basic.Sprite;
  */
 public class Explosion extends Sprite {
 
-    private float animateInterval = 0.01f;
+    private float animateInterval = 0.00001f;
     private float animateTimer;
 
     private Sound explosionSound = Gdx.audio.newSound(Gdx.files.internal("sounds/explosive.wav"));

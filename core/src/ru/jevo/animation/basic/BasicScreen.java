@@ -18,21 +18,18 @@ import ru.jevo.animation.service.Rect;
 import ru.jevo.animation.sprites.other.Background;
 import ru.jevo.animation.sprites.other.Star;
 
+import static ru.jevo.animation.basic.Const.MY_SCREEN_SIZE;
+import static ru.jevo.animation.basic.Const.STAR_COUNT;
 /**
  * Created by Alexander on 25.11.2018.
  */
 public class BasicScreen implements Screen, InputProcessor {
 
+    public TextureAtlas menuTextureAtlas = new TextureAtlas("atlas/menuAtlas.tpack");
+
     final protected Game game;
-
-    public static final float MY_SCREEN_SIZE = 10f;
-    public static final int STAR_COUNT = 150;
-
-
     final protected Music rainMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/main.mp3"));
     protected Texture bgTexture;
-    protected TextureAtlas mainTextureAtlas;
-    protected TextureAtlas menuTextureAtlas;
     protected Background mBackground;
     protected Star[] mStar;
 
@@ -59,9 +56,10 @@ public class BasicScreen implements Screen, InputProcessor {
     @Override
     public void show() {
         batch = new SpriteBatch();
+        mStar = new Star[STAR_COUNT];
+        for (int i = 0; i < STAR_COUNT; i++)
+            mStar[i] = new Star(menuTextureAtlas);
         Gdx.input.setInputProcessor(this);
-        menuTextureAtlas = new TextureAtlas("atlas/menuAtlas.tpack");
-        mainTextureAtlas = new TextureAtlas("atlas/mainAtlas.tpack");
     }
 
     @Override
